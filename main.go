@@ -20,7 +20,7 @@ func main() {
 			break
 		}
 		// display the results of the operation
-		result, err = EvaluateRPN(equation)
+		result, err = Calculate(equation)
 		if err == nil {
 			fmt.Printf("Result: %v\n", result)
 		} else {
