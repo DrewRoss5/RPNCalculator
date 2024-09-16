@@ -25,7 +25,7 @@ func ApplyOperation(x, y float64, operator string) (float64, error) {
 	default:
 		return 0, fmt.Errorf("unrecognized operator: %v", operator)
 	}
-	return result, nil
+	return (math.Round(result*1000) / 1000), nil
 }
 
 func Calculate(operands stack, operators []string) (float64, error) {
