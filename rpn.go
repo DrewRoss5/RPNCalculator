@@ -22,6 +22,10 @@ func ApplyOperation(x, y float64, operator string) (float64, error) {
 		result = x / y
 	case "//":
 		result = math.Floor(x / y)
+	case "^":
+		result = math.Pow(x, y)
+	case "%":
+		result = float64(int64(x) % int64(y))
 	default:
 		return 0, fmt.Errorf("unrecognized operator: %v", operator)
 	}
