@@ -4,16 +4,16 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"strings"
 )
 
 func main() {
 	var equation string
 	var result float64
 	var err error
-	var operators []string
-	var operands stack
+	var tokens []string
 	reader := bufio.NewReader(os.Stdin)
-	for true {
+	for {
 		// read the user's input (and strip off the \n suffix)
 		fmt.Print("RPNCalc > ")
 		equation, _ = reader.ReadString('\n')
@@ -22,12 +22,8 @@ func main() {
 			break
 		}
 		// display the results of the operation
-		operators, operands, err = SplitTokens(equation)
-		if err != nil {
-			fmt.Printf("Error: %v\n", err)
-			continue
-		}
-		result, err = Calculate(operators, operands)
+		tokens = strings.Split(equation, " ")
+		result, err = Calculate(tokens)
 		if err == nil {
 			fmt.Printf("Result: %v\n", result)
 		} else {
