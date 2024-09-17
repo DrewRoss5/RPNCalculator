@@ -9,26 +9,19 @@ import (
 	"strings"
 )
 
+type math_op func(float64, float64) float64
+
+func Add(x, y float64) float64    { return x + y }
+func Sub(x, y float64) float64    { return x - y }
+func Multi(x, y float64) float64  { return x * y }
+func Div(x, y float64) float64    { return x / y }
+func DivInt(x, y float64) float64 { return math.Floor(x / y) }
+func Mod(x, y float64) float64    { return float64(int(x) % int(y)) }
+
 // performs a specified operation with two floats and returns the result. Returns an error if the operator is unrecognized
 func ApplyOperation(x, y float64, operator string) float64 {
-	var result float64
-	switch operator {
-	case "+":
-		result = x + y
-	case "-":
-		result = x - y
-	case "*":
-		result = x * y
-	case "/":
-		result = x / y
-	case "//":
-		result = math.Floor(x / y)
-	case "^":
-		result = math.Pow(x, y)
-	case "%":
-		result = float64(int64(x) % int64(y))
-	}
-	return (math.Round(result*1000) / 1000)
+	func_map := map[string]math_op{"+": Add, "-": Sub, "*": Multi, "/": Div, "//": DivInt, "%": Mod, "^": math.Pow}
+	return (math.Round(func_map[operator](x, y)*1000) / 1000)
 }
 
 func Calculate(operators []string, operands stack) (float64, error) {
@@ -65,7 +58,7 @@ func SplitTokens(equation string) ([]string, stack, error) {
 		num, err = strconv.ParseFloat(token, 64)
 		if err == nil {
 			operands = append(operands, num)
-			continue
+
 		} else {
 			if !slices.Contains(valid_operators, token) {
 				return nil, nil, fmt.Errorf("unrecognized token: %v", token)
@@ -73,6 +66,5 @@ func SplitTokens(equation string) ([]string, stack, error) {
 			operators = append(operators, token)
 		}
 	}
-
 	return operators, operands, nil
 }
